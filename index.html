@@ -20,153 +20,56 @@
       align-items: center;
       background: #f3ede2;
       font-family: 'Gowun Batang', serif;
-      overflow: hidden;
     }
 
-    /* 봉투 & 편지 전체 컨테이너 */
-    .wrapper {
-      position: relative;
-      cursor: pointer;
-    }
-
-    .envelope-box {
-      position: relative;
-      width: 320px;
-      height: 220px;
-      background-color: #d1b89d;
-      border-radius: 0 0 10px 10px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    }
-
-    /* 봉투 덮개 (삼각형) */
-    .lid {
-      position: absolute;
-      top: 0;
-      left: 0;
-      border-right: 160px solid transparent;
-      border-left: 160px solid transparent;
-      border-top: 120px solid #bc9d7e;
-      transform-origin: top;
-      transition: transform 0.5s ease-in-out, z-index 0.3s;
-      z-index: 3;
-    }
-
-    /* 봉투 접힌 부분 양옆/아래 */
-    .envelope-box::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      border-right: 160px solid #cbb094;
-      border-top: 110px solid transparent;
-      border-bottom: 110px solid #cbb094;
-      border-left: 160px solid #c1a588;
-      border-radius: 0 0 10px 10px;
-      z-index: 2;
-    }
-
-    /* 편지지 스타일 */
-    .letter {
-      position: absolute;
-      bottom: 10px;
-      left: 15px;
-      width: 290px;
-      height: 200px;
+    .card {
+      width: 90%;
+      max-width: 420px;
       background: #fffdf9;
-      border-radius: 6px;
-      padding: 20px 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: all 0.6s ease-in-out;
-      z-index: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border: 1px solid #eae2d6;
+      padding: 35px 25px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      border: 1px solid #e8e2d5;
+      text-align: center;
     }
 
-    .letter-title {
-      font-size: 1.1rem;
+    .title {
+      font-size: 1.25rem;
       font-weight: bold;
       color: #7a5c43;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
 
-    .letter-text {
-      font-size: 0.92rem;
-      line-height: 1.6;
+    .content {
+      font-size: 0.98rem;
+      line-height: 1.8;
       color: #4a3e3d;
       white-space: pre-line;
-      overflow-y: auto;
+      margin-bottom: 25px;
+      text-align: left;
     }
 
-    .letter-from {
+    .from {
       text-align: right;
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: bold;
       color: #7a5c43;
-      margin-top: 10px;
-    }
-
-    /* 안내 문구 */
-    .click-hint {
-      position: absolute;
-      bottom: -40px;
-      width: 100%;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #8c7865;
-      animation: blink 1.5s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
-
-    /* 애니메이션 클래스 (클릭 시 실행) */
-    .wrapper.open .lid {
-      transform: rotateX(180deg);
-      z-index: 0;
-    }
-
-    .wrapper.open .letter {
-      transform: translateY(-130px);
-      height: 320px;
-      z-index: 4;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
   </style>
 </head>
 <body>
 
-  <div class="wrapper" id="envelopeWrapper">
-    <div class="lid"></div>
-    <div class="envelope-box"></div>
-    
-    <div class="letter">
-      <div>
-        <div class="letter-title">To. 특별한 당신에게</div>
-        <div class="letter-text">전하고 싶었던 마음을 여기에 담아 보냅니다.
+  <div class="card">
+    <div class="title">To. 특별한 당신에게</div>
+    <div class="content">전하고 싶었던 마음을 여기에 담아 보냅니다.
 
 늘 곁에서 힘이 되어주는 당신 덕분에
 매일이 따뜻하고 감사한 순간으로 채워집니다.
 
 오늘 하루도 편안하고 행복한 일들만 가득하기를 바라며,
 언제나 당신을 응원할게요.</div>
-      </div>
-      <div class="letter-from">From. 마음을 담아</div>
-    </div>
-
-    <div class="click-hint">편지를 터치해 보세요 ✉️</div>
+    <div class="from">From. 마음을 담아</div>
   </div>
-
-  <script>
-    const wrapper = document.getElementById('envelopeWrapper');
-    wrapper.addEventListener('click', () => {
-      wrapper.classList.toggle('open');
-    });
-  </script>
 
 </body>
 </html>
