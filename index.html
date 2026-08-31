@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>마음을 담은 편지</title>
+  <title>HWANI HEART</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
 
@@ -18,58 +18,171 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #f3ede2;
+      background-color: #f7f1e3;
       font-family: 'Gowun Batang', serif;
+      overflow: hidden; /* 하트가 화면 밖으로 나가지 않도록 */
+      position: relative;
     }
 
-    .card {
-      width: 90%;
+    /* 하트 공통 스타일 */
+    .heart {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: #ffcccc; /* 기본 하트 색상 (연핑크) */
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s;
+      animation: float 5s infinite ease-in-out;
+      z-index: 10;
+    }
+
+    /* 하트 모양 (Pseudo-elements) */
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background-color: inherit;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -20px;
+      left: 0;
+    }
+    .heart::after {
+      top: 0;
+      left: -20px;
+    }
+    .heart-shape {
+      transform: rotate(-45deg);
+    }
+
+    /* 가짜 하트 클릭 시 */
+    .heart.wrong {
+      background-color: #d1ccc0; /* 회색으로 변함 */
+      cursor: default;
+    }
+
+    /* 진정한 하트 클릭 시 (편지가 나옴) */
+    .heart.real {
+      background-color: #ff6b6b; /* 진한 붉은색 */
+      transform: scale(1.3) rotate(-45deg); /* 강조 */
+    }
+
+    /* 편지 카드 스타일 */
+    #letter-card {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      width: 85%;
       max-width: 420px;
       background: #fffdf9;
-      padding: 35px 25px;
+      padding: 40px 30px;
       border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
       border: 1px solid #e8e2d5;
       text-align: center;
+      z-index: 20;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 팝업 애니메이션 */
     }
 
-    .title {
-      font-size: 1.25rem;
+    /* 편지 카드 등장 */
+    #letter-card.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .letter-title {
+      font-size: 1.3rem;
       font-weight: bold;
       color: #7a5c43;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
-    .content {
-      font-size: 0.98rem;
+    .letter-content {
+      font-size: 1rem;
       line-height: 1.8;
       color: #4a3e3d;
       white-space: pre-line;
-      margin-bottom: 25px;
       text-align: left;
+      margin-bottom: 30px;
     }
 
-    .from {
+    .letter-from {
       text-align: right;
       font-size: 1rem;
       font-weight: bold;
       color: #7a5c43;
     }
+
+    /* 하트 둥둥 떠다니는 애니메이션 */
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(-45deg); }
+      25% { transform: translate(20px, -20px) rotate(-45deg); }
+      50% { transform: translate(-15px, -30px) rotate(-40deg); }
+      75% { transform: translate(15px, 20px) rotate(-50deg); }
+    }
+
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <div class="title">To. 특별한 당신에게</div>
-    <div class="content">전하고 싶었던 마음을 여기에 담아 보냅니다.
+  <div id="letter-card">
+    <div class="letter-title">To. 환이</div>
+    <div class="letter-content">
+      사랑하는 내 강아지야
+      내 하트를 찾아줘서 고마워
 
-늘 곁에서 힘이 되어주는 당신 덕분에
-매일이 따뜻하고 감사한 순간으로 채워집니다.
-
-오늘 하루도 편안하고 행복한 일들만 가득하기를 바라며,
-언제나 당신을 응원할게요.</div>
-    <div class="from">From. 마음을 담아</div>
+      오늘도 엄청나게 많이 사랑해    
+    </div>
+    <div class="letter-from">From. 승주</div>
   </div>
+
+  <script>
+    // 설정: 하트의 전체 개수
+    const TOTAL_HEARTS = 15;
+    const body = document.body;
+    const letterCard = document.getElementById('letter-card');
+    
+    // 1. 임의의 하트 하나를 '진정한 하트'로 선정
+    const realHeartIndex = Math.floor(Math.random() * TOTAL_HEARTS);
+
+    // 2. 하트를 생성하고 화면에 랜덤 배치
+    for (let i = 0; i < TOTAL_HEARTS; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart', 'heart-shape');
+
+      // 랜덤 위치 설정 (화면 테두리 제외)
+      const posX = Math.random() * 85; // 0% ~ 85%
+      const posY = Math.random() * 85; // 0% ~ 85%
+      heart.style.left = `${posX + 5}%`;
+      heart.style.top = `${posY + 5}%`;
+
+      // 각 하트마다 약간씩 다른 애니메이션 지연 시간 적용
+      heart.style.animationDelay = `${Math.random() * 5}s`;
+
+      // 3. 진정한 하트인지 구분
+      if (i === realHeartIndex) {
+        heart.addEventListener('click', () => {
+          heart.classList.add('real'); // 진한 빨강으로 변함
+          setTimeout(() => {
+            letterCard.classList.add('show'); // 편지가 나타남
+          }, 400); 
+        });
+      } else {
+        heart.addEventListener('click', () => {
+          heart.classList.add('wrong'); // 회색으로 변함
+        });
+      }
+
+      body.appendChild(heart);
+    }
+  </script>
 
 </body>
 </html>
